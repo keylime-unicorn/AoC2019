@@ -1,39 +1,46 @@
 import sys
 
-for line in sys.stdin:
-    original = list([int(x) for x in line.split(",")])
+def intcode_computer(program):
 
-    #replace values in 1 and 2
-    for j in range(0,100):
-        for k in range(0,100):
-            new = original[:]
-            new[1] = j
-            new[2] = k
+    nxt = 0
 
-            nxt = 0
-            for i in range(len(new)):
-                if nxt == i:
-                    opcode = new[i]
-                else: 
-                    continue
+    for i in range(len(program)):
+        if nxt == i:
+            opcode = program[i]
+        else: 
+            continue
 
-                if opcode == 1:
-                    new[new[i+3]] = new[new[i+1]] + new[new[i+2]]  
-                    nxt = i+4
-                elif opcode == 2:
-                    new[new[i+3]] = new[new[i+1]] * new[new[i+2]]  
-                    nxt = i+4
-                elif opcode == 99:
-                    break
-                else:
-                    print("ERROR: ", opcode)
-        
-            if new[0] == 19690720:
-                break
-        
-        if new[0] == 19690720:
+        if opcode == 1:
+            program[program[i+3]] = program[program[i+1]] + program[program[i+2]]  
+            nxt = i+4
+        elif opcode == 2:
+            program[program[i+3]] = program[program[i+1]] * program[program[i+2]]  
+            nxt = i+4
+        elif opcode == 99:
             break
 
-    print(j,k)
-    answer = 100 * j + k
-    print(answer)
+    return program
+
+def main():
+    
+    for line in sys.stdin:
+        line = list([int(x) for x in line.split(",")])
+
+        #set up program
+        for j in range(0,100):
+            for k in range(0,100):
+                line[1] = j
+                line[2] = k
+
+                result = intcode_computer(line[:])
+                if result[0] == 19690720:
+                    break
+
+            if result[0] == 19690720:
+                break
+
+        answer = 100 * j + k
+        print(answer)
+
+if __name__ == "__main__":
+    main()
