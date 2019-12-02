@@ -1,19 +1,21 @@
 import sys
 
-s = 0
-for line in sys.stdin:
-    i = int(line.strip())
+def calculate_mass(num):
 
-    total = 0
+    if num <= 0:
+        return 0
 
-    while i > 0:
-        i = int(i/3)
-        i = i-2
+    return calculate_mass(num // 3 - 2) + num
 
-        if i >= 0:
-            total += i
-            print("total: ", total)
+def main():
+    
+    total_mass = 0
 
-    s += total
+    for line in sys.stdin:
+        number = int(line.strip())
+        total_mass += calculate_mass(number // 3 - 2)
 
-print("sum: ", s)
+    print(total_mass)
+
+if __name__ == "__main__":
+    main()
